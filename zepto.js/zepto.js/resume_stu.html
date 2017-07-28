@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title></title>
+    <script src="js/zepto.js"></script>
+    <style>
+        ul {
+            list-style: none;
+            padding: 0
+        }
+
+        ul .tl-wrap {
+            background: #eee;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 2px;
+        }
+
+        ul .tl-wrap.current {
+            color: #ffffff;
+            background-color: greenyellow;
+        }
+    </style>
+</head>
+<body>
+
+<h1>About Me</h1>
+<p>出生年月：1999-10-10</p>
+<p>手机:185-6789-9876</p>
+<p>状态：工作中</p>
+<a href="http://www.baidu.com">个人技术博客</a>
+<br/>
+
+<h1>Work and Education</h1>
+<ul id='history'>
+
+</ul>
+
+<br/>
+
+<h1>Technology and Experience</h1>
+
+<div id="skills">
+
+</div>
+<script>
+    $.get("getWorkinfo.php",function(data){
+ /*       console.log(data);
+        //创建样式形式
+        $("#history").width(1000).height(300).css({
+            backgroundColor:"#0f0"
+        });
+        var str='';
+        for(var i=0;i<data.length;i++){
+            str+=`<div id="d1">${data[i].name}</div>`;
+        }
+        $("#history").html(str);*/
+        showWorkInfo(data);
+    });
+    function showWorkInfo(data){
+        //遍历数组
+        $.each(data,function(index,value){
+            var list=$("#history");
+            //将拿到的内容显示在li中
+            var listItem=$('<li></li>');
+            listItem.html(value.name+value.date);
+            //将li插入到list中
+            listItem.addClass("tl-wrap");
+            console.log(index);
+            if(index==0){
+                listItem.addClass("current");
+            }
+            list.append(listItem);
+        })
+    }
+    $.get("getTechinfo.php",function(data){
+        var container=$('#skills');
+        $.map(data,function(value,index){
+            console.log(value);
+            var title=$('<h3>'+value.name+'</h3>');
+            /*str+=$(`<progress value="${value.level}"></progress>`);*/
+            var child=$('<div>123</div>');
+            var percentValue=((value.level)/10)*100+'%';
+            var percent=$('<div>'+percentValue+'</div>').css({width:'80%',backgroundColor:'#ff0',textAlign:'center'});
+            child.append(percent);
+            container.append(title);
+            container.append(child);
+        });
+    });
+</script>
+</body>
+</html>
